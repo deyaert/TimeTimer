@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>TimeTimer</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+$(document).ready(function() {
+	var timerEndTime = null;
+	var initialRemainingSeconds = null;
+	var timerHandle = null; 
+	
+	function getSeconds(startDate, endDate) {
+		var result = (startDate.getTime() - endDate.getTime()) / 1000;
+		return result.toFixed(0);
+	}
+	
+	function getNow() {
+		return new Date;
+	}
+	
+	function calculatePercent(delta, total) {
+		var result = ((delta) / total) * 100;
+		return result.toFixed(0);
+	}
+	
+	function updateDeltaProgressbar(percentage) {
+		$("#deltaprogressbar").css("width", percentage + "%");
+	}
+	
+	function timerTick(){ 
+		var percent = 0;
+		var remainingSeconds = getSeconds(getNow(), timerEndTime);		
+		percent = (getNow() > timerEndTime) ? 100 : calculatePercent(initialRemainingSeconds - remainingSeconds, initialRemainingSeconds);		
+		console.log("'initialRemainingSeconds' (" + initialRemainingSeconds + ") - 'remainingSeconds' (" + remainingSeconds + ") -> " + percent + "%");
+	
+		updateDeltaProgressbar(percent);
+		
+		if (getNow() > timerEndTime) 
+			clearInterval(timerHandle);		
+	}
+	
+	$("#btnSetTimer").click(function() {
+		$("#timetimer").show();
+		$("#timetimerconfig").hide();
+		
+		var hours = $("#txtHours").val();
+		var minutes = $("#txtMinutes").val();
+		
+		timerEndTime = new Date;
+		timerEndTime.setHours(hours, minutes, 0); 		
+		
+		initialRemainingSeconds = getSeconds(getNow(), timerEndTime);
+
+		timerHandle = setInterval(timerTick, 1000);
+	});
+	
+	$('#txtMinutes').keypress(function(e){
+		if(e.keyCode==13) 
+		{
+			$('#btnSetTimer').click();
+		}
+	});
+	
+	$("#timetimer").hide();
+	$("#txtHours").focus();
+});
+</script>
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+	}
+	
+	#timetimer {		
+	}
+	
+	#deltaprogressbar {
+		position: absolute;		
+		background-color:red;
+		height: 400px;
+		z-index:2;
+	}
+	
+	#fullprogressbar {
+		position: absolute;
+		width: 100%;
+		background-color:black;
+		height: 400px;
+		z-index: 1;
+	}	
+</style>
+<div id="timetimerconfig">
+	<p>TimeTimer Configuratie</p>
+	<p>Vul een eindtijd in:</p>
+	<input type="text" id="txtHours"></input>:
+	<input type="text" id="txtMinutes"></input>
+	<input type="button" id="btnSetTimer" value="set"></input>
+</div>
+<div id="timetimer">
+	<div id="deltaprogressbar"></div>
+	<div id="fullprogressbar"></div>
+	<div style="clear:both;></div>
+</div>
+</body>
+</html>
