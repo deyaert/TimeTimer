@@ -131,6 +131,13 @@
             hideTimeTimer();
             focusTxtHours();
             setHourAndMinutesValue();
+
+            function log(msg) {
+                $("#log").text(msg);
+            }
+
+            var msg = "$( window ).width() => " + $(window).width();
+            log(msg);
         });
     </script>
     <style type="text/css">
@@ -227,7 +234,7 @@
             <option value="50">50</option>
             <option value="55">55</option>
         </select>
-        <input type="button" id="btnSetTimer" value="set"></input>
+        <input type="button" id="btnSetTimer" value="set" />
     </div>
     <div id="timetimer">
         <div id="deltaprogressbar"></div>
@@ -237,6 +244,8 @@
         <div id="nowTime"></div>
         <div id="endTime"></div>
         <div style="clear:both;"></div>
+    </div>
+    <div id="log">
     </div>
 </body>
 </html>
