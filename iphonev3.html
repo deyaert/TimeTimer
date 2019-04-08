@@ -1,6 +1,6 @@
 <html>
 <head>
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=375">
     <title>TimeTimer</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
@@ -158,6 +158,11 @@
             font: 12pt Helvetica, sans-serif;
         }
 
+        #timetimerconfig {
+            position: relative;
+            width: 375px;
+        }
+
         #timetimer {
             position: relative;
             width: 375px;
@@ -248,9 +253,9 @@
         <div id="deltaprogressbar"></div>
         <div id="fullprogressbar"></div>
         <div style="clear:both;"></div>
-        <div id="startTime"></div>
-        <div id="nowTime"></div>
-        <div id="endTime"></div>
+        <div id="startTime">00:00:00</div>
+        <div id="nowTime">00:00:00</div>
+        <div id="endTime">00:00:00</div>
         <div style="clear:both;"></div>
     </div>
     <div id="log">
