@@ -19,12 +19,14 @@
             function getNow() {
                 return new Date;
             }
+
             function getNiceTimeString(date) {         
                 var hrs = "" + date.getHours() + "";
                 var mins = "" + date.getMinutes() + "";
                 var result = hrs.padStart(2, "0") + ":" + mins.padStart(2, "0");
                 return result;
             }
+
             function getNiceTimeWithSecondsString(date) {
                 var hrs = "" + date.getHours() + "";
                 var mins = "" + date.getMinutes() + "";
@@ -50,6 +52,7 @@
 
                 updateDeltaProgressbar(percent);
                 setNowTime();
+                setPercentage(percent);
 
                 if (getNow() > timerEndTime)
                     clearInterval(timerHandle);
@@ -101,15 +104,32 @@
                 var startTime = getNiceTimeWithSecondsString(getNow());
                 $("#startTime").text(startTime);
             };
+
             function setEndTime(endDate) {
                 var endTime = getNiceTimeWithSecondsString(endDate);
                 $("#endTime").text(endTime);
             };
+
             function setNowTime() {
                 var now = getNiceTimeWithSecondsString(getNow());
                 $("#nowTime").text(now);
             };
 
+            function setPercentage(percentage) {                
+                var actualPercentage = "";
+                if (percentage < 10) {
+                    actualPercentage = "&nbsp;&nbsp;" + percentage + "%";
+                }
+                else if (percentage < 100) {
+                    actualPercentage = "&nbsp;" + percentage + "%";
+                }
+                else {
+                    actualPercentage = percentage + "%";
+                }
+                
+                
+                $("#percentage").html(actualPercentage);
+            }
 
             $("#btnSetTimer").click(function () {
                 showTimeTimer();
@@ -121,6 +141,7 @@
                 timerEndTime = new Date;
                 timerEndTime.setHours(hours, minutes, 0);
 
+                setPercentage(0);
                 setStartTime();
                 setNowTime();
                 setEndTime(timerEndTime);
@@ -166,6 +187,15 @@
         #timetimer {
             position: relative;
             width: 375px;
+        }
+
+        #percentage {
+            position: absolute;
+            font: 100px Arial;
+            color: white;
+            height: 200px;
+            z-index: 3;
+            padding-left: 60px;
         }
 
         #deltaprogressbar {
@@ -250,6 +280,7 @@
         <input type="button" id="btnSetTimer" value="set" />
     </div>
     <div id="timetimer">
+        <div id="percentage"></div>
         <div id="deltaprogressbar"></div>
         <div id="fullprogressbar"></div>
         <div style="clear:both;"></div>
