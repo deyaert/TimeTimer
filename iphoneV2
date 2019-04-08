@@ -1,0 +1,242 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>TimeTimer</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var timerEndTime = null;
+            var initialRemainingSeconds = null;
+            var timerHandle = null;
+
+            function getSeconds(startDate, endDate) {
+                var result = (startDate.getTime() - endDate.getTime()) / 1000;
+                return result.toFixed(0);
+            }
+
+            function getNow() {
+                return new Date;
+            }
+            function getNiceTimeString(date) {
+                var result = date.getHours() + ":" + date.getMinutes();
+                return result;
+            }
+            function getNiceTimeWithSecondsString(date) {
+                var result = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+                return result;
+            }
+
+            function calculatePercent(delta, total) {
+                var result = ((delta) / total) * 100;
+                return result.toFixed(0);
+            }
+
+            function updateDeltaProgressbar(percentage) {
+                $("#deltaprogressbar").css("width", percentage + "%");
+            }
+
+            function timerTick() {
+                var percent = 0;
+                var remainingSeconds = getSeconds(getNow(), timerEndTime);
+                percent = (getNow() > timerEndTime) ? 100 : calculatePercent(initialRemainingSeconds - remainingSeconds, initialRemainingSeconds);
+                console.log("'initialRemainingSeconds' (" + initialRemainingSeconds + ") - 'remainingSeconds' (" + remainingSeconds + ") -> " + percent + "%");
+
+                updateDeltaProgressbar(percent);
+                setNowTime();
+
+                if (getNow() > timerEndTime)
+                    clearInterval(timerHandle);
+            }
+
+            function setHourAndMinutesValue() {
+                var now = getNow();
+                var hoursStr = "" + now.getHours() + "";
+                setInputHourValue(hoursStr.padStart(2, "0"));
+            }
+
+            function focusTxtHours() {
+                $("#txtHours").focus();
+            }
+
+            function showTimeTimer() {
+                $("#timetimer").show();
+            }
+
+            function hideTimeTimer() {
+                $("#timetimer").hide();
+            }
+
+            function hideTimeTimerConfig() {
+                $("#timetimerconfig").hide();
+            }
+
+            function setInputHourValue(hourValue) {
+                return $("#txtHours").val(hourValue);
+            }
+
+            function getInputHourValue() {
+                return $("#txtHours").val();
+            }
+
+            function setInputMinuteValue(minuteValue) {
+                return $("#txtMinutes").val(minuteValue);
+            }
+
+            function getInputMinuteValue() {
+                return $("#txtMinutes").val();
+            }
+
+            function setStartTime() {
+                var startTime = getNiceTimeString(getNow());
+                $("#startTime").text(startTime);
+            };
+            function setEndTime(endDate) {
+                var endTime = getNiceTimeString(endDate);
+                $("#endTime").text(endTime);
+            };
+            function setNowTime() {
+                var now = getNiceTimeWithSecondsString(getNow());
+                $("#nowTime").text(now);
+            };
+
+
+            $("#btnSetTimer").click(function () {
+                showTimeTimer();
+                hideTimeTimerConfig();
+
+                var hours = getInputHourValue();
+                var minutes = getInputMinuteValue();
+
+                timerEndTime = new Date;
+                timerEndTime.setHours(hours, minutes, 0);
+
+                setStartTime();
+                setNowTime();
+                setEndTime(timerEndTime);
+
+                initialRemainingSeconds = getSeconds(getNow(), timerEndTime);
+
+                timerHandle = setInterval(timerTick, 1000);
+            });
+
+            $('#txtMinutes').keypress(function (e) {
+                if (e.keyCode == 13) {
+                    $('#btnSetTimer').click();
+                }
+            });
+
+            //hideTimeTimerConfig();
+            hideTimeTimer();
+            focusTxtHours();
+            setHourAndMinutesValue();
+        });
+    </script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            width: 320px;
+            font: 12pt Helvetica, sans-serif;
+        }
+
+        #timetimer {
+            position: relative;
+            width: 480px;
+        }
+
+        #deltaprogressbar {
+            position: absolute;
+            background-color: red;
+            height: 200px;
+            z-index: 2;
+        }
+
+        #fullprogressbar {
+            position: absolute;
+            width: 100%;
+            background-color: black;
+            height: 200px;
+            z-index: 1;
+        }
+
+        #startTime {
+            position: relative;
+            top: 201px;
+            float: left;
+            font-size: x-large;
+            width: 160px;
+        }
+
+        #nowTime {
+            position: relative;
+            top: 201px;
+            float: left;
+            font-size: x-large;
+            padding-left: 50px;
+        }
+
+        #endTime {
+            position: relative;
+            top: 201px;
+            float: right;
+            font-size: x-large;
+        }
+    </style>
+    <div id="timetimerconfig">
+        <p>TimeTimer Configuratie</p>
+        <p>Vul een eindtijd in:</p>
+        <select id="txtHours">
+            <option value="00">00</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+        </select>:
+        <select id="txtMinutes">
+            <option value="00">00</option>
+            <option value="05">05</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+            <option value="55">55</option>
+        </select>
+        <input type="button" id="btnSetTimer" value="set"></input>
+    </div>
+    <div id="timetimer">
+        <div id="deltaprogressbar"></div>
+        <div id="fullprogressbar"></div>
+        <div style="clear:both;"></div>
+        <div id="startTime"></div>
+        <div id="nowTime"></div>
+        <div id="endTime"></div>
+        <div style="clear:both;"></div>
+    </div>
+</body>
+</html>
