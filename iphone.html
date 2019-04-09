@@ -176,6 +176,28 @@
                 }
             });
 
+            var screenWidth = $(window).width();
+
+            var startTimeElement = $("#startTime");
+            var nowTimeElement = $("#nowTime");
+            var percentageElement = $("#percentage");
+            var timeTimerElement = $("#timetimer");
+            var timeTimerConfigElement = $("#timetimerconfig");
+
+            var startTimeWidth = startTimeElement.width();
+            var nowTimeWidth = nowTimeElement.width();
+            var percentageWidth = percentageElement.width();
+
+            var nowTimePaddingLeft = (screenWidth / 2) - startTimeWidth - (nowTimeWidth / 2);
+            nowTimePaddingLeft = nowTimePaddingLeft.toFixed(0);
+            var percentagePaddingLeft = (screenWidth - percentageWidth) / 2;
+            percentagePaddingLeft = percentagePaddingLeft.toFixed(0);
+
+            timeTimerConfigElement.css("width", screenWidth + "px");
+            timeTimerElement.css("width", screenWidth + "px");
+            nowTimeElement.css("padding-left", nowTimePaddingLeft + "px");
+            percentageElement.css("padding-left", percentagePaddingLeft + "px");
+           
             //hideTimeTimerConfig();
             hideTimeTimer();
             focusTxtHours();
@@ -194,18 +216,16 @@
         body {
             margin: 0;
             padding: 0;
-            width: 375px;
             font: 12pt Helvetica, sans-serif;
+            background-color: lightgray;
         }
 
         #timetimerconfig {
             position: relative;
-            width: 375px;
         }
 
         #timetimer {
-            position: relative;
-            width: 375px;
+            position: relative;            
         }
 
         #percentage {
@@ -214,7 +234,6 @@
             color: white;
             height: 200px;
             z-index: 3;
-            padding-left: 60px;
         }
 
         #deltaprogressbar {
@@ -246,6 +265,7 @@
             font-size: x-large;
             padding-left:47px;   
         }
+
         #endTime {
             position: relative;
             top: 201px;
@@ -299,7 +319,7 @@
         <input type="button" id="btnSetTimer" value="set" />
     </div>
     <div id="timetimer">
-        <div id="percentage"></div>
+        <div id="percentage">000%</div>
         <div id="deltaprogressbar"></div>
         <div id="fullprogressbar"></div>
         <div style="clear:both;"></div>
